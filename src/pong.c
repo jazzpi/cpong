@@ -83,9 +83,15 @@ bool pong_tick(pong* game, pong_move moves[2]) {
 
     int xi = round(game->ball.x);
     if (xi < -1) {
-        game->scores[0]++;
+        if (++(game->scores[1]) >= PONG_SCORE_MAX) {
+            return false;
+        }
+        pong_reset_board(game);
     } else if (xi > PONG_COLS) {
-        game->scores[1]++;
+        if (++(game->scores[0]) >= PONG_SCORE_MAX) {
+            return false;
+        }
+        pong_reset_board(game);
     }
-    return xi >= -1 && xi <= PONG_COLS;
+    return true;
 }

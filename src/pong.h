@@ -8,6 +8,8 @@
 #define PONG_PADDLE 3
 #define PONG_PADDLE_MAX (PONG_COLS - PONG_PADDLE)
 #define PONG_RANDOM_MAX (M_PI / 4)
+#define PONG_SCORE_MAX 11
+#define PONG_SCORE_STRLEN 7 /* "00 | 00" */
 
 typedef enum {
     PONG_NONE, PONG_UP, PONG_DOWN, PONG_QUIT

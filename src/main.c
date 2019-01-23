@@ -151,9 +151,8 @@ static void d_ball(pong_ball ball, pong_ball prev) {
 }
 
 static void d_score(pong* game) {
-    /* strlen("0000 | 0000") = 11 */
-    ansi_esc_move_cursor((PONG_COLS - 11) / 2, 0);
-    printf("%04d | %04d", game->scores[0], game->scores[1]);
+    ansi_esc_move_cursor((PONG_COLS - PONG_SCORE_STRLEN) / 2, 0);
+    printf("%02d | %02d", game->scores[0], game->scores[1]);
 }
 
 static void d_game(pong* game, pong* prev) {
