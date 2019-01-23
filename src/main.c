@@ -173,6 +173,36 @@ static void d_game(pong* game, pong* prev) {
 static pong game;
 static pong prev;
 
+const char* const PONG_GAME_OVER_HEADER_LINES[] = {
+    "█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█",
+    "▌ G A M E   O V E R ▐",
+    "▌                   ▐",
+    "▌   THE WINNER IS   ▐",
+    NULL
+};
+#define PONG_GAME_OVER_WINNER_LINE  "▌      PLAYER %d     ▐"
+#define PONG_GAME_OVER_FOOTER_LINE "█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█"
+#define PONG_GAME_OVER_WIDTH 22
+#define PONG_GAME_OVER_HEIGHT 6
+
+static void d_gameover(int player) {
+    unsigned x = (PONG_COLS + 2 - PONG_GAME_OVER_WIDTH) / 2;
+    unsigned y = (PONG_ROWS + 2 - PONG_GAME_OVER_HEIGHT) / 2;
+
+    unsigned i;
+    const char* line;
+    for (i = 0; (line = PONG_GAME_OVER_HEADER_LINES[i]) != NULL; i++) {
+        ansi_esc_move_cursor(x, y);
+        printf("%s", line);
+        y++;
+    }
+    ansi_esc_move_cursor(x, y);
+    printf(PONG_GAME_OVER_WINNER_LINE, player);
+    y++;
+    ansi_esc_move_cursor(x, y);
+    printf(PONG_GAME_OVER_FOOTER_LINE);
+}
+
 int main() {
     srand(time(NULL));
     signal(SIGINT, handle_sigint);
@@ -182,14 +212,19 @@ int main() {
     d_init();
 
     while (running) {
+        usleep(60E3);
+
         if (!pong_tick(&game, read_chars())) {
             running = false;
-            break;
         }
         d_game(&game, &prev);
         prev = game;
+    }
 
-        usleep(60E3);
+    if (game.scores[0] >= PONG_SCORE_MAX) {
+        d_gameover(1);
+    } else if (game.scores[1] >= PONG_SCORE_MAX) {
+        d_gameover(2);
     }
 
     ansi_esc_move_cursor(0, PONG_ROWS + 1);
