@@ -10,6 +10,7 @@
 #define PONG_RANDOM_MAX (M_PI / 4)
 #define PONG_SCORE_MAX 11
 #define PONG_SCORE_STRLEN 7 /* "00 | 00" */
+#define PONG_TICKS_PER_BALL_MOVE 1
 
 typedef enum {
     PONG_NONE, PONG_UP, PONG_DOWN, PONG_QUIT
@@ -25,6 +26,7 @@ typedef struct {
     int paddles[2];
     int scores[2];
     pong_ball ball;
+    int ticks_until_ball_move;
 } pong;
 
 void pong_init(pong* game);

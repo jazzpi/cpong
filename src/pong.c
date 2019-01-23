@@ -14,6 +14,7 @@ void pong_reset_board(pong* game) {
     game->ball.x = PONG_COLS / 2.0;
     game->ball.y = PONG_ROWS / 2.0;
     game->ball.dir = 0;
+    game->ticks_until_ball_move = PONG_TICKS_PER_BALL_MOVE;
 }
 
 void pong_pmove(int* pos, int ydiff) {
@@ -79,7 +80,10 @@ bool pong_tick(pong* game, pong_move moves[2]) {
         }
     }
 
-    pong_bmove(game);
+    if (--(game->ticks_until_ball_move) == 0) {
+        pong_bmove(game);
+        game->ticks_until_ball_move = PONG_TICKS_PER_BALL_MOVE;
+    }
 
     int xi = round(game->ball.x);
     if (xi < -1) {

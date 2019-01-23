@@ -11,6 +11,8 @@
 #include "pong.h"
 #include "ansi_esc.h"
 
+#define TICK_RATE (1E6 / 20) /* us */
+
 /* https://stackoverflow.com/a/37872060/2192641 */
 void stdin_set(bool enable_nonblocking) {
     struct termios t;
@@ -212,7 +214,7 @@ int main() {
     d_init();
 
     while (running) {
-        usleep(60E3);
+        usleep(TICK_RATE);
 
         if (!pong_tick(&game, read_chars())) {
             running = false;
